@@ -1,0 +1,20 @@
+[package]
+name = "firebreak-attack"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+curve25519-dalek = { version = "4", features = ["serde", "legacy_compatibility", "rand_core"] }
+firebreak-core = { version = "0.1.0", path = "../firebreak-core" }
+flamechain = { version = "0.1.0", path = "../../flame-lib/flamechain" }
+flamekd = { version = "0.1.0", path = "../../flame-lib/flamekd" }
+flamepayments = { version = "0.1.0", path = "../../flame-lib/flamepayments" }
+flamevm = { version = "0.1.0", path = "../../flame-lib/flamevm" }
+musig = { version = "0.1.0", path = "../../flame-lib/musig" }
+rand = "0.8"
+thiserror = "2"
+
+[dev-dependencies]
+firebreak-core = { path = "../firebreak-core", features = ["devnet"] }
+flamed = { path = "../../flame-lib/flamed", features = ["devnet"] }
