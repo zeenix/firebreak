@@ -161,6 +161,18 @@ pub enum Stopped {
     Target(firebreak_core::Error),
 }
 
+impl From<firebreak_core::Error> for Stopped {
+    fn from(error: firebreak_core::Error) -> Stopped {
+        match error {
+            firebreak_core::Error::Vm(error) => Stopped::Prover(error),
+            error @ (firebreak_core::Error::Musig(_) | firebreak_core::Error::MissingKey(_)) => {
+                Stopped::Signer(error)
+            }
+            other => Stopped::Target(other),
+        }
+    }
+}
+
 /// A signed adversarial transaction.
 pub struct Candidate {
     /// The transaction, signed with the delegated key where it requires signatures.
@@ -347,16 +359,4 @@ fn stripped_redeem(policy: &VoucherPolicy) -> ScriptBuilder {
         .drop_()
         .log()
         .drop_()
-}
-
-impl From<firebreak_core::Error> for Stopped {
-    fn from(error: firebreak_core::Error) -> Stopped {
-        match error {
-            firebreak_core::Error::Vm(error) => Stopped::Prover(error),
-            error @ (firebreak_core::Error::Musig(_) | firebreak_core::Error::MissingKey(_)) => {
-                Stopped::Signer(error)
-            }
-            other => Stopped::Target(other),
-        }
-    }
 }
