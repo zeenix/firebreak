@@ -2,9 +2,7 @@
 //! 1,000, the delegate pays 60 to the merchant, the merchant opens the receipts and spends what it
 //! received, the owner recovers the unspent 40, and nobody can redeem a recovered voucher.
 
-mod common;
-
-use common::{DENOMINATIONS, Devnet, GENESIS_SPARKS, Parties, fund, output, rng};
+use firebreak_core::devnet::{DENOMINATIONS, Devnet, GENESIS_SPARKS, Parties, fund, output, rng};
 use firebreak_core::{WalletInput, build};
 use flamekd::util;
 use flamepayments::{InputSpec, build_transfer, prepare_output};

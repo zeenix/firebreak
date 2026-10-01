@@ -502,6 +502,7 @@ version = "0.1.0"
 dependencies = [
  "cells",
  "curve25519-dalek",
+ "firebreak-core",
  "flamechain",
  "flamed",
  "flamed-rpc",

@@ -1,10 +1,11 @@
-//! Fixtures for tests that run vouchers against a real, in-process Flame node.
+//! An in-process Flame devnet with fresh parties and a funded allowance, for tests.
 //!
-//! Every transaction a test submits goes through the node's own admission path: the bytes are
+//! Every transaction submitted here goes through the node's own admission path: the bytes are
 //! decoded under the chain's limits, re-executed, verified, and checked against the UTXO set.
+//! Blocks are minted on demand, so a test decides exactly what each block holds. Being test
+//! scaffolding, its helpers panic on anything unexpected.
 
 use curve25519_dalek::scalar::Scalar as DalekScalar;
-use firebreak_core::{Payout, Voucher, VoucherPolicy, WalletInput, build, keys};
 use flamechain::utreexo::Proof;
 use flamechain::{BlockTx, ChainParams, codec::contract_from_bytes};
 use flamed::config::{ChainParamsFile, GenesisFile, GenesisSpec, NetworkName, NodeConfig};
@@ -14,6 +15,8 @@ use flamepayments::{Account, Opening, OutputSpec, PreparedOutput, open_note, pre
 use flamevm::{Contract, ExternalTx, FLAME_FLAVOR, TxID, UnsignedTx};
 use rand::SeedableRng;
 use rand::rngs::StdRng;
+
+use crate::{Payout, Voucher, VoucherPolicy, WalletInput, build, keys};
 
 /// What the owner's wallet holds at genesis, in sparks.
 pub const GENESIS_SPARKS: u64 = 1_000;

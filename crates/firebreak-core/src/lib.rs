@@ -6,6 +6,8 @@
 //! it back. See [`voucher`] for the contract and [`build`] for the transactions around it.
 
 pub mod build;
+#[cfg(feature = "devnet")]
+pub mod devnet;
 pub mod keys;
 pub mod voucher;
 
