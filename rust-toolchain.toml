@@ -1,0 +1,4 @@
+# Same toolchain as the pinned Flame revision.
+[toolchain]
+channel = "1.90.0"
+components = ["clippy", "rustfmt"]

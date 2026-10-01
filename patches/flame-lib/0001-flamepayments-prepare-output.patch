@@ -1,0 +1,131 @@
+diff --git a/flamepayments/src/builder.rs b/flamepayments/src/builder.rs
+index 0a8c3d0..ee2f438 100644
+--- a/flamepayments/src/builder.rs
++++ b/flamepayments/src/builder.rs
+@@ -167,6 +167,65 @@ pub struct OutputSpec {
+     pub memo: Vec<u8>,
+ }
+ 
++/// A confidential output sealed before the transaction that publishes it exists.
++///
++/// [`build_transfer`] seals and publishes an output in one step. A contract that pays a token out
++/// to its recipient only later needs the two apart: it locks the token together with its note,
++/// and emits both when it pays out. The note must then follow, in the very next `Data` entry, the
++/// output that locks the token under the address's spending key, where [`crate::open_note`] finds
++/// and opens it as for any other output.
++///
++/// Its `Debug` output shows only the note's length: the token's commitments carry their openings.
++#[derive(Clone)]
++pub struct PreparedOutput {
++    /// The token, with open commitments, for the transaction that creates it.
++    pub token: Token,
++    /// The note sealed to the output's address.
++    pub note: Vec<u8>,
++    /// The token's opening: what its creator keeps to spend or rebuild it. The recipient opens
++    /// the same one from `note`.
++    pub opening: Opening,
++}
++
++impl fmt::Debug for PreparedOutput {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.debug_struct("PreparedOutput")
++            .field("note_len", &self.note.len())
++            .finish_non_exhaustive()
++    }
++}
++
++/// Seals `output` without publishing it. Like every output of [`build_transfer`], it gets its own
++/// fresh, nonzero sender randomness, drawn from `rng`.
++pub fn prepare_output<R: RngCore + CryptoRng>(
++    output: &OutputSpec,
++    rng: &mut R,
++) -> Result<PreparedOutput, BuilderError> {
++    if output.memo.len() > MEMO_MAX {
++        return Err(BuilderError::MemoTooLong(output.memo.len()));
++    }
++    let r = Zeroizing::new(nonzero_scalar(rng));
++    let sealed = note::seal(&output.address, &r, output.qty, output.flv, &output.memo);
++    let opening = Opening {
++        qty: output.qty,
++        flv: output.flv,
++        qty_blinding: sealed.secrets.qty_blinding,
++        flv_blinding: sealed.secrets.flv_blinding,
++    };
++    let token = Token::from_opening(
++        Scalar::from(opening.qty),
++        opening.flv,
++        opening.qty_blinding,
++        opening.flv_blinding,
++    )
++    .expect("a u64 quantity is always inside the 64-bit range");
++    Ok(PreparedOutput {
++        token,
++        note: sealed.note,
++        opening,
++    })
++}
++
+ /// Builds the unsigned transfer.
+ ///
+ /// The script, in order:
+diff --git a/flamepayments/src/lib.rs b/flamepayments/src/lib.rs
+index a6e7694..06c18e8 100644
+--- a/flamepayments/src/lib.rs
++++ b/flamepayments/src/lib.rs
+@@ -15,7 +15,8 @@ pub mod keys;
+ pub mod note;
+ 
+ pub use builder::{
+-    block_tx, build_transfer, sign, BuilderError, InputSpec, Opening, OutputSpec, MAX_OUTPUTS,
++    block_tx, build_transfer, prepare_output, sign, BuilderError, InputSpec, Opening, OutputSpec,
++    PreparedOutput, MAX_OUTPUTS,
+ };
+ pub use keys::{Account, KeyError};
+ pub use note::{open_note, outputs_with_notes, NoteError, ReceivedNote, MEMO_MAX, NOTE_VERSION};
+diff --git a/flamepayments/src/tests/note.rs b/flamepayments/src/tests/note.rs
+index 5fe8b06..e186758 100644
+--- a/flamepayments/src/tests/note.rs
++++ b/flamepayments/src/tests/note.rs
+@@ -663,3 +663,42 @@ fn one_generator_state_does_not_repeat_r_across_transfers() {
+     ];
+     assert_ne!(first, r_of(header(), &split), "other outputs");
+ }
++
++/// A note sealed ahead of its output opens once a later transaction publishes the token under the
++/// address, whatever that output's anchor, and gives back the opening its sender kept.
++#[test]
++fn a_prepared_output_opens_wherever_it_is_published() {
++    let account = account();
++    let address = account.address_at(util::RECEIVING, 1).expect("address");
++    let view_key = account
++        .viewing_key_at(util::RECEIVING, 1)
++        .expect("view key");
++    let spend_key = account
++        .spending_key_at(util::RECEIVING, 1)
++        .expect("spend key");
++    let mut output = native_output(address, 5_000);
++    output.memo = b"voucher 7".to_vec();
++    let prepared = crate::prepare_output(&output, &mut rng(60)).expect("prepare");
++
++    let published = Contract::new(
++        Predicate::opaque(address.spending_key().compress()),
++        Anchor([0x99; 32]),
++        Value::Token(prepared.token.clone()),
++    )
++    .expect("a token is portable");
++    let received =
++        open_note(&published, Some(&prepared.note), &address, &view_key).expect("the note opens");
++    assert_eq!(received.opening.qty, prepared.opening.qty);
++    assert_eq!(received.opening.flv, prepared.opening.flv);
++    assert_eq!(received.opening.qty_blinding, prepared.opening.qty_blinding);
++    assert_eq!(received.opening.flv_blinding, prepared.opening.flv_blinding);
++    assert_eq!(received.memo, b"voucher 7");
++    InputSpec::confidential(&published, &received.opening, Proof::Transient, spend_key)
++        .expect("the opening spends the output");
++
++    output.memo = vec![0; MEMO_MAX + 1];
++    assert!(matches!(
++        crate::prepare_output(&output, &mut rng(61)),
++        Err(BuilderError::MemoTooLong(_))
++    ));
++}

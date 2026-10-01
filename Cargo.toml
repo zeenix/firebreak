@@ -1,0 +1,24 @@
+[workspace]
+# Same resolver as the pinned Flame revision, so dependency resolution honours its toolchain.
+resolver = "3"
+members = ["crates/*"]
+# The Flame checkout is a separate workspace that Firebreak uses through path dependencies.
+exclude = ["flame-lib"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+# Flame's VM needs the `dynamic-labels` feature that only the runflame fork of merlin has. Cargo
+# honours `[patch]` only in the root workspace, so this mirrors the pin in flame-lib/Cargo.toml.
+[patch.crates-io]
+merlin = { git = "https://github.com/runflame/merlin", rev = "fcc51efb4fc0b47e1a004cfe3aef65f47c5612f0" }
+
+# Proving and verifying are unbearably slow unoptimized, so the two crypto crates are optimized in
+# dev builds too, as in flame-lib.
+[profile.dev.package.bulletproofs]
+opt-level = 3
+
+[profile.dev.package.curve25519-dalek]
+opt-level = 3

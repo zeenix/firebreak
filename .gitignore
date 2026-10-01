@@ -1,0 +1,5 @@
+/target
+# Pinned Flame checkout, created by scripts/setup-flame.sh.
+/flame-lib
+# Runtime state: keys, voucher openings and node data. Never commit these.
+/.firebreak

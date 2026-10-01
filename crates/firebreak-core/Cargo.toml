@@ -1,0 +1,25 @@
+[package]
+name = "firebreak-core"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+cells = { version = "0.1.0", path = "../../flame-lib/cells" }
+curve25519-dalek = { version = "4", features = ["serde", "legacy_compatibility", "rand_core"] }
+flamechain = { version = "0.1.0", path = "../../flame-lib/flamechain" }
+flamed-rpc = { version = "0.1.0", path = "../../flame-lib/flamed-rpc" }
+flamekd = { version = "0.1.0", path = "../../flame-lib/flamekd" }
+flamepayments = { version = "0.1.0", path = "../../flame-lib/flamepayments" }
+flamevm = { version = "0.1.0", path = "../../flame-lib/flamevm" }
+hex = "0.4"
+merlin = "3"
+musig = { version = "0.1.0", path = "../../flame-lib/musig" }
+rand = "0.8"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+thiserror = "2"
+
+[dev-dependencies]
+flamed = { path = "../../flame-lib/flamed", features = ["devnet"] }
+tempfile = "3"
