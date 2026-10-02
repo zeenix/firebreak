@@ -46,8 +46,8 @@ pub enum Error {
     NoInputs,
 
     #[error(
-        "{0} payouts; a funding transaction makes 1 to {}",
-        flamepayments::MAX_OUTPUTS
+        "{0} payouts; a funding transaction makes 1 to {max}",
+        max = flamepayments::MAX_OUTPUTS
     )]
     PayoutCount(usize),
 
