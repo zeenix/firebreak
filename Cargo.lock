@@ -549,6 +549,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aedcfb3409746eddb02b9e19ebda1c3394f759a152e48ee875a0844d1b955484"
 
 [[package]]
+name = "firebreak-agent"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "clap",
+ "firebreak-core",
+ "flamekd",
+ "flamepayments",
+ "flamevm",
+ "hex 0.4.3",
+ "http-body-util",
+ "hyper-util",
+ "rand 0.8.8",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.21",
+ "tokio",
+]
+
+[[package]]
 name = "firebreak-attack"
 version = "0.1.0"
 dependencies = [
@@ -614,6 +635,58 @@ dependencies = [
  "serde",
  "serde_json",
  "tempfile",
+ "tokio",
+]
+
+[[package]]
+name = "firebreak-mcp"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "bytes",
+ "clap",
+ "http",
+ "http-body-util",
+ "hyper-util",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
+name = "firebreak-merchant"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "firebreak-core",
+ "firebreak-owner",
+ "flamekd",
+ "flamepayments",
+ "flamevm",
+ "hex 0.4.3",
+ "rand 0.8.8",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.21",
+ "tokio",
+]
+
+[[package]]
+name = "firebreak-owner"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "curve25519-dalek",
+ "firebreak-core",
+ "flamed",
+ "flamekd",
+ "flamepayments",
+ "flamevm",
+ "hex 0.4.3",
+ "rand 0.8.8",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.21",
  "tokio",
 ]
 
