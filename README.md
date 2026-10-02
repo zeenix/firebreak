@@ -107,7 +107,10 @@ balances are owner 940, merchant 60, allowance 0.
 
 Each role is its own program with its own key file under `.firebreak/<role>/`:
 `firebreak-owner`, `firebreak-agent`, `firebreak-merchant`, and the adversary's
-`firebreak-attack`. For example:
+`firebreak-attack`, whose `attacker/attacker.json` is only the adversary's own disposable wallet,
+where it tries to pay itself. The dashboard pays through the app and reveals the delegated key;
+the owner's, the merchant's and the attacker's actions are command-line actions, so the dashboard
+never holds their keys. For example:
 
 ```sh
 firebreak-attack list                        # what the adversary can try

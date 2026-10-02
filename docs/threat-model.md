@@ -128,3 +128,7 @@ recovery fees from its wallet; neither is implemented.
   which is a logical boundary on a shared laptop, not an operating-system security boundary.
 - Production key storage. Keys and openings are plain JSON files with owner-only permissions.
 - Anything about a network other than the local devnet.
+- That the agent's own view names every spend correctly. The agent calls a voucher spent by a
+  transaction it did not make `recovered`, which is wrong when someone else holding the delegated
+  key redeemed it to the merchant. The owner's view is right (a spend that is not its recovery is
+  `redeemed`), and the merchant's receipts say what it was paid.

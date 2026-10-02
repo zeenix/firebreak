@@ -16,7 +16,7 @@ apps on Flame, through fixed-value, single-use vouchers.
    amount. The merchant opens its receipts, checks them against the tokens, and spends the 60.
 3. **Unused authority can be recovered.** The owner, with its own key alone, recovers the two 20s
    into its wallet, and a recovered voucher cannot be redeemed. Final balances: owner 940,
-   merchant 60, allowance 0.
+   merchant 60, allowance 0, out of 1,000; the local devnet charges no fees.
 
 ## Where Flame is used
 
