@@ -4,15 +4,25 @@
 //! decoded under the chain's limits, re-executed, verified, and checked against the UTXO set.
 //! Blocks are minted on demand, so a test decides exactly what each block holds. Being test
 //! scaffolding, its helpers panic on anything unexpected.
+//!
+//! [`Devnet`] is the node itself, driven directly. [`LocalNode`] is the same node behind a JSON-RPC
+//! server on a local port, for tests that go through [`crate::Chain`] the way a role's program
+//! does.
+
+use std::net::SocketAddr;
+use std::path::Path;
+use std::sync::{Arc, Mutex};
+use std::time::Duration;
 
 use curve25519_dalek::scalar::Scalar as DalekScalar;
 use flamechain::utreexo::Proof;
 use flamechain::{BlockTx, ChainParams, codec::contract_from_bytes};
 use flamed::config::{ChainParamsFile, GenesisFile, GenesisSpec, NetworkName, NodeConfig};
-use flamed::{Node, NodeError, ProofStatus, TxStatus};
+use flamed::{Node, NodeError, ProofStatus, SharedNode, TxStatus};
 use flamekd::{Network, ReceivingAddress, util};
 use flamepayments::{Account, Opening, OutputSpec, PreparedOutput, open_note, prepare_output};
 use flamevm::{Contract, ExternalTx, FLAME_FLAVOR, TxID, UnsignedTx};
+use jsonrpsee::server::ServerHandle;
 use rand::SeedableRng;
 use rand::rngs::StdRng;
 
@@ -97,30 +107,7 @@ impl Devnet {
             .address_at(util::RECEIVING, 0)
             .expect("owner address")
             .to_bech32(Network::Testnet);
-        let chainparams = ChainParamsFile {
-            version: 1,
-            network: NetworkName::Testnet,
-            storage: Default::default(),
-            limits: Default::default(),
-            genesis: vec![GenesisSpec {
-                address: Some(address),
-                predicate: None,
-                qty_sparks: GENESIS_SPARKS,
-            }],
-        };
-        let path = dir.path().join("genesis.json");
-        flamed::genesis::write(&chainparams, &path).expect("derive genesis.json");
-        let genesis = GenesisFile::load(&path).expect("read genesis.json");
-        let cfg = NodeConfig {
-            data_dir: dir.path().to_path_buf(),
-            genesis: Some(path),
-            rpc_bind: "127.0.0.1:0".parse().expect("a socket address"),
-            block_interval_secs: 15,
-            minimum_fee: 0,
-        };
-        let node = Node::open(&genesis, &cfg).expect("open the node");
-        let genesis =
-            contract_from_bytes(&genesis.contracts[0].bytes.0).expect("the genesis contract");
+        let (node, genesis) = open_node(dir.path(), address, GENESIS_SPARKS);
         Devnet {
             node,
             genesis,
@@ -203,6 +190,65 @@ impl Devnet {
     }
 }
 
+/// A node in this process that serves the JSON-RPC interface on a local port.
+///
+/// It is the node [`Devnet`] drives, with the server that `flamed` runs in front of it: the same
+/// seven methods over HTTP, answered from the same state. Blocks are minted on demand, by
+/// [`LocalNode::mint`], so a test decides which transactions each block holds.
+pub struct LocalNode {
+    node: SharedNode,
+    addr: SocketAddr,
+    handle: ServerHandle,
+    _dir: tempfile::TempDir,
+}
+
+impl LocalNode {
+    /// Starts a node whose genesis gives the `tf1...` address `genesis_address` all of `sparks`,
+    /// and serves it on a free port of the loopback interface.
+    pub async fn start(genesis_address: &str, sparks: u64) -> LocalNode {
+        let dir = tempfile::tempdir().expect("a temporary directory");
+        let (node, _) = open_node(dir.path(), genesis_address.to_owned(), sparks);
+        let node: SharedNode = Arc::new(Mutex::new(node));
+        let bind = "127.0.0.1:0".parse().expect("a socket address");
+        let (addr, handle) = flamed::rpc::serve(Arc::clone(&node), bind)
+            .await
+            .expect("bind the RPC server");
+        LocalNode {
+            node,
+            addr,
+            handle,
+            _dir: dir,
+        }
+    }
+
+    /// The URL of the node's JSON-RPC server.
+    pub fn url(&self) -> String {
+        format!("http://{}", self.addr)
+    }
+
+    /// Mints one block from whatever the mempool holds, and returns its height.
+    pub fn mint(&self) -> u64 {
+        let mut node = self.node.lock().expect("the node is not poisoned");
+        let minted = node.mint_block();
+        let height = node.tip().height;
+        // The guard goes before any panic, which would otherwise poison the node.
+        drop(node);
+        minted.expect("mint a block");
+        height
+    }
+
+    /// Stops the server and waits for it, for at most five seconds.
+    ///
+    /// The server finishes only when every client has closed its connection, so drop every
+    /// [`crate::Chain`] first. A client that is still connected delays the stop until the time
+    /// is up.
+    pub async fn stop(self) {
+        // A server that is already stopping is what is wanted anyway.
+        let _ = self.handle.stop();
+        let _ = tokio::time::timeout(STOP_PATIENCE, self.handle.stopped()).await;
+    }
+}
+
 /// A funded allowance: its vouchers as published, and what the owner kept to recover them.
 pub struct Allowance {
     pub vouchers: Vec<Voucher>,
@@ -268,6 +314,39 @@ pub fn fund(devnet: &mut Devnet, parties: &Parties, rng: &mut StdRng) -> Allowan
         openings: prepared.iter().map(|prepared| prepared.opening).collect(),
         change,
     }
+}
+
+/// How long [`LocalNode::stop`] waits for the server to finish.
+const STOP_PATIENCE: Duration = Duration::from_secs(5);
+
+/// Opens a node in `dir` on a fresh chain whose genesis gives `address` all of `sparks`, and
+/// returns it with the genesis allocation.
+fn open_node(dir: &Path, address: String, sparks: u64) -> (Node, Contract) {
+    let chainparams = ChainParamsFile {
+        version: 1,
+        network: NetworkName::Testnet,
+        storage: Default::default(),
+        limits: Default::default(),
+        genesis: vec![GenesisSpec {
+            address: Some(address),
+            predicate: None,
+            qty_sparks: sparks,
+        }],
+    };
+    let path = dir.join("genesis.json");
+    flamed::genesis::write(&chainparams, &path).expect("derive genesis.json");
+    let genesis = GenesisFile::load(&path).expect("read genesis.json");
+    let cfg = NodeConfig {
+        data_dir: dir.to_path_buf(),
+        genesis: Some(path),
+        rpc_bind: "127.0.0.1:0".parse().expect("a socket address"),
+        block_interval_secs: 15,
+        minimum_fee: 0,
+    };
+    let node = Node::open(&genesis, &cfg).expect("open the node");
+    let allocation =
+        contract_from_bytes(&genesis.contracts[0].bytes.0).expect("the genesis contract");
+    (node, allocation)
 }
 
 /// The vouchers and the change a funding transaction creates, read from its effect log.
