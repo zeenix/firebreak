@@ -11,6 +11,8 @@
 //! ([`Stopped::Signer`]), or the signed bytes can be refused by a verifier or the node. The last
 //! one is the caller's to observe: [`craft`] only hands back the signed candidate.
 
+pub mod run;
+
 use curve25519_dalek::ristretto::CompressedRistretto;
 use curve25519_dalek::scalar::Scalar as DalekScalar;
 use firebreak_core::build::{self, HEADER, LIMITS};

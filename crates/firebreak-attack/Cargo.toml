@@ -5,16 +5,23 @@ edition.workspace = true
 publish.workspace = true
 
 [dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
 curve25519-dalek = { version = "4", features = ["serde", "legacy_compatibility", "rand_core"] }
 firebreak-core = { version = "0.1.0", path = "../firebreak-core" }
 flamechain = { version = "0.1.0", path = "../../flame-lib/flamechain" }
 flamekd = { version = "0.1.0", path = "../../flame-lib/flamekd" }
 flamepayments = { version = "0.1.0", path = "../../flame-lib/flamepayments" }
 flamevm = { version = "0.1.0", path = "../../flame-lib/flamevm" }
+hex = "0.4"
 musig = { version = "0.1.0", path = "../../flame-lib/musig" }
 rand = "0.8"
+serde = { version = "1.0.229", features = ["derive"] }
 thiserror = "2"
+tokio = { version = "1.53.1", features = ["rt", "macros"] }
 
 [dev-dependencies]
 firebreak-core = { path = "../firebreak-core", features = ["devnet"] }
 flamed = { path = "../../flame-lib/flamed", features = ["devnet"] }
+serde_json = "1.0.151"
+tempfile = "3"
+tokio = { version = "1.53.1", features = ["rt", "macros", "time"] }
