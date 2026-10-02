@@ -52,6 +52,7 @@ denominations, not a cryptographic rejection.
 | `firebreak-merchant` | Merchant CLI: finds payments, opens receipts, spends what it received |
 | `firebreak-attack` | Adversary: builds and submits unauthorized transactions with the delegated key |
 | `firebreak-demo` | Local dashboard: owner, app, merchant and public-observer views |
+| `firebreak-mcp` | Optional AI tool: an MCP server that offers a model only the app's `pay` (see [docs/ai-tool.md](docs/ai-tool.md)) |
 
 Every component that touches the chain uses Flame: `flamevm` for the contract, scripts, proofs and
 signatures, `flamepayments` for keys, notes and ordinary transfers, `flamechain` for transaction
