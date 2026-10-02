@@ -75,6 +75,40 @@ cargo build --release --manifest-path flame-lib/Cargo.toml -p flamed --features 
   code ahead of the transaction that publishes the output. It exposes no shared secret and adds no
   new encryption.
 
+## Running the demonstration
+
+```sh
+scripts/demo.sh          # step by step, pausing before each step
+scripts/demo.sh --auto   # the same without pauses; checks the final balances
+```
+
+The script wipes `./.firebreak`, creates fresh keys for the three parties, writes a devnet genesis
+that gives the owner 1,000 sparks, starts `flamed` (2-second blocks, zero fees), the app's API and
+the dashboard at <http://127.0.0.1:7742>, and then runs the story with the real binaries:
+
+1. The owner funds an allowance of 100 for one merchant: vouchers of 50, 20, 20 and 10.
+2. The delegated key is revealed, and the attacker tries to redirect the money with it. Every
+   attempt is refused by the prover or by the node, and the vouchers stay unspent.
+3. The app pays 60: it redeems the 50 and the 10. Asking for 110 is refused.
+4. The merchant opens its receipts, checks them against the payments, and spends the 60.
+5. The owner recovers the two unused 20s.
+6. Redeeming a recovered voucher is refused by the node.
+
+The public observer view shows what anyone watching the chain sees: transaction IDs, inputs,
+outputs, commitments and receipt lengths, with every amount marked "not public". The final
+balances are owner 940, merchant 60, allowance 0.
+
+Each role is its own program with its own key file under `.firebreak/<role>/`:
+`firebreak-owner`, `firebreak-agent`, `firebreak-merchant`, and the adversary's
+`firebreak-attack`. For example:
+
+```sh
+firebreak-attack list                        # what the adversary can try
+firebreak-attack attempt owner-branch        # one attack, with where it was stopped
+firebreak-attack matrix                      # every attack that must be refused
+firebreak-attack attempt key-path --key HEX  # with the key the dashboard revealed
+```
+
 ## Testing
 
 ```sh
