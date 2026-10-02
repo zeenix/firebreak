@@ -124,8 +124,16 @@ confirmed in blocks.
   the delegated key alone; the merchant opens the receipts and spends 60; the owner recovers 40
   with its own key alone and spends it; a recovered voucher cannot be redeemed; final balances are
   owner 940, merchant 60, allowance 0.
-- `crates/firebreak-attack/tests/matrix.rs`: the attack matrix. See
-  [docs/threat-model.md](docs/threat-model.md).
+- `crates/firebreak-core/tests/rpc_lifecycle.rs`: the same through the node's JSON-RPC interface,
+  including a stale membership proof that is refused, then accepted once refreshed.
+- `crates/firebreak-attack/tests/matrix.rs` and `cli.rs`: the attack matrix, directly against the
+  node and through the attack command line. See [docs/threat-model.md](docs/threat-model.md).
+- `crates/firebreak-owner/tests`, `crates/firebreak-merchant/tests`, `crates/firebreak-agent/tests`:
+  every command of each role against a node served over JSON-RPC, including openings saved before
+  the funding is broadcast, lost replies, stale proofs, a recovery racing a redemption, and the
+  agent's refusals (another merchant, no exact combination of vouchers, insufficient authority).
+- `crates/firebreak-demo` and `crates/firebreak-mcp`: the dashboard's public view of real
+  transactions, which never shows an amount, and the AI tool's protocol handling.
 
 ## License and scope of original work
 
