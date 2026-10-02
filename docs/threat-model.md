@@ -50,11 +50,11 @@ value (`mix`), single-use contract inputs and the fixed programs enforce it on c
 ## What the adversary cannot do
 
 `crates/firebreak-attack/tests/matrix.rs` runs every attempt below against an in-process Flame
-node with the genuine delegated key, and `tests/cli.rs` runs them again through the runner behind
-the attack command line, over the node's JSON-RPC interface. Each candidate is serialized, decoded and verified the
-way the chain does, then offered to the node's mempool. After every refused attempt the test mints
-a block and checks that the targeted voucher is still unspent, and at the end that it still
-redeems to the merchant.
+node with the genuine delegated key, and `tests/cli.rs` runs them again through the runner
+behind the attack command line, over the node's JSON-RPC interface. Each candidate is
+serialized, decoded and verified the way the chain does, then offered to the node's mempool.
+After every refused attempt the test mints a block and checks that the targeted voucher is still
+unspent, and at the end that it still redeems to the merchant.
 
 - **Spend the voucher through `signtx` on its own predicate (the key path), signed by the
   delegate.** Refused by the verifier and the node: `BatchSignatureVerificationFailed`.
