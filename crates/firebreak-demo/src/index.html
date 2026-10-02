@@ -40,10 +40,22 @@ body {
 }
 header, main { max-width: 1600px; margin: 0 auto; padding: 0 16px; }
 header { padding-top: 8px; }
-.titlebar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 4px 24px; }
+.titlebar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4px 24px;
+}
 h1 { margin: 0; font-size: 1.6rem; }
 h2 { margin: 0 0 4px; font-size: 1.4rem; }
-h3 { margin: 16px 0 6px; font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+h3 {
+  margin: 16px 0 6px;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
 p { margin: 6px 0; }
 .lead { color: var(--muted); margin-top: 2px; }
 .status-line { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin: 4px 0; }
@@ -60,8 +72,20 @@ p { margin: 6px 0; }
   padding: 0 16px 14px;
   min-width: 0;
 }
-.panel > h2 { position: sticky; top: 0; z-index: 1; background: var(--panel); margin: 0 0 4px; padding: 12px 0 4px; }
-.mono { font-family: var(--mono); font-size: 0.88em; overflow-wrap: anywhere; word-break: break-all; }
+.panel > h2 {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel);
+  margin: 0 0 4px;
+  padding: 12px 0 4px;
+}
+.mono {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
 .copyable { cursor: copy; }
 .copied { outline: 2px solid var(--ok); background: var(--ok-bg); }
 .muted { color: var(--muted); }
@@ -84,7 +108,13 @@ code { font-family: var(--mono); background: var(--grey-bg); padding: 1px 6px; b
 .b-bad { color: var(--bad); background: var(--bad-bg); }
 .b-info { color: var(--info); background: var(--info-bg); }
 .b-grey { color: var(--grey); background: var(--grey-bg); }
-.notice { border: 2px solid; border-radius: 8px; padding: 8px 12px; margin: 8px 0; overflow-wrap: anywhere; }
+.notice {
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
 .notice.ok { color: var(--ok); background: var(--ok-bg); }
 .notice.warn { color: var(--warn); background: var(--warn-bg); }
 .notice.bad { color: var(--bad); background: var(--bad-bg); }
@@ -94,12 +124,29 @@ code { font-family: var(--mono); background: var(--grey-bg); padding: 1px 6px; b
 .big { font-size: 2rem; font-weight: 800; line-height: 1.1; }
 .big small { font-size: 1rem; font-weight: 600; color: var(--muted); }
 table { width: 100%; border-collapse: collapse; margin: 4px 0 8px; }
-th, td { text-align: left; padding: 5px 8px 5px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th, td {
+  text-align: left;
+  padding: 5px 8px 5px 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
 th { font-size: 0.85rem; color: var(--muted); font-weight: 700; }
 td.num, th.num { text-align: right; padding-right: 12px; font-variant-numeric: tabular-nums; }
-.allowance { border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; margin: 10px 0; background: #fafbfc; }
+.allowance {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 10px 0;
+  background: #fafbfc;
+}
 .allowance > .head { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
-form.pay { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 12px; align-items: center; margin: 8px 0; }
+form.pay {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 8px 12px;
+  align-items: center;
+  margin: 8px 0;
+}
 form.pay label { font-weight: 700; }
 input, select, button { font: inherit; }
 input, select {
@@ -124,15 +171,33 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 button.danger { background: #8c1010; border-color: #5c0a0a; }
 button.plain { background: #fff; color: var(--text); }
 form.pay button { grid-column: 2; justify-self: start; }
-.keybox { border: 3px solid var(--bad); border-radius: 8px; padding: 8px 12px; margin: 8px 0; background: #fff5f5; }
+.keybox {
+  border: 3px solid var(--bad);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  background: #fff5f5;
+}
 .keybox .secret { user-select: all; font-weight: 700; }
 .gap { margin-top: 6px; }
-.tx { border: 1px solid var(--line); border-left: 6px solid var(--edge); border-radius: 8px; padding: 8px 12px; margin: 10px 0; background: #fafbfc; }
+.tx {
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--edge);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 10px 0;
+  background: #fafbfc;
+}
 .tx.rejected { border-left-color: var(--bad); }
 .tx.accepted { border-left-color: var(--ok); }
 .tx .top { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
 .tx .label { font-weight: 700; }
-.tx dl { margin: 6px 0 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 3px 12px; }
+.tx dl {
+  margin: 6px 0 0;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 3px 12px;
+}
 .tx dt { color: var(--muted); font-size: 0.88rem; font-weight: 700; padding-top: 2px; }
 .tx dd { margin: 0; min-width: 0; }
 .tx ul { margin: 0; padding-left: 18px; }
@@ -153,20 +218,24 @@ form.pay button { grid-column: 2; justify-self: start; }
   <div class="titlebar">
     <div>
       <h1>Firebreak <span class="muted light">demo dashboard</span></h1>
-      <p class="lead">An owner gives an app vouchers it can spend only at one merchant, and can take back what is unspent.</p>
+      <p class="lead">An owner gives an app vouchers it can spend only at one merchant,
+        and can take back what is unspent.</p>
     </div>
-    <div id="status-line" class="status-line" aria-live="polite"><span class="muted">Connecting&hellip;</span></div>
+    <div id="status-line" class="status-line"
+         aria-live="polite"><span class="muted">Connecting&hellip;</span></div>
   </div>
   <div id="source-notes"></div>
 </header>
 <main class="grid">
   <section id="owner" class="panel" aria-labelledby="owner-title">
-    <h2 id="owner-title">Owner <span class="who">holds the funds and the recovery key &middot; private view</span></h2>
+    <h2 id="owner-title">Owner <span class="who">holds the funds and the recovery key
+      &middot; private view</span></h2>
     <div id="owner-body"><p class="empty">Loading&hellip;</p></div>
   </section>
 
   <section id="app" class="panel" aria-labelledby="app-title">
-    <h2 id="app-title">App <span class="who">holds only the delegated key and the voucher descriptors</span></h2>
+    <h2 id="app-title">App <span class="who">holds only the delegated key
+      and the voucher descriptors</span></h2>
     <div id="app-status"></div>
     <form id="pay-form" class="pay" autocomplete="off">
       <label for="pay-allowance">Allowance</label>
@@ -182,20 +251,24 @@ form.pay button { grid-column: 2; justify-self: start; }
     <h3>Available vouchers</h3>
     <div id="app-vouchers"></div>
     <h3>Delegated key</h3>
-    <div class="notice warn"><strong>Demo only.</strong> The button below shows this app's <strong>secret signing key</strong>
-      on screen, so that you can try to misuse it. Whoever holds it can redeem the unspent vouchers, and by design
+    <div class="notice warn"><strong>Demo only.</strong> The button below shows this app's
+      <strong>secret signing key</strong>
+      on screen, so that you can try to misuse it. Whoever holds it can redeem the unspent
+      vouchers, and by design
       only to the fixed merchant: that is what an attack attempt tests.</div>
     <button id="reveal-button" type="button" class="danger">Reveal delegated key</button>
     <div id="key-box"></div>
   </section>
 
   <section id="merchant" class="panel" aria-labelledby="merchant-title">
-    <h2 id="merchant-title">Merchant <span class="who">private view &middot; the merchant decrypted these receipts, nobody else can</span></h2>
+    <h2 id="merchant-title">Merchant <span class="who">private view
+      &middot; the merchant decrypted these receipts, nobody else can</span></h2>
     <div id="merchant-body"><p class="empty">Loading&hellip;</p></div>
   </section>
 
   <section id="observer" class="panel" aria-labelledby="observer-title">
-    <h2 id="observer-title">Public observer <span class="who">what anyone watching the chain can see &middot; newest first</span></h2>
+    <h2 id="observer-title">Public observer <span class="who">what anyone watching the chain can see
+      &middot; newest first</span></h2>
     <div id="observer-body"><p class="empty">Loading&hellip;</p></div>
   </section>
 </main>
@@ -269,7 +342,8 @@ function unavailable(source, what, hint) {
       hint ? h('p', { class: 'small muted' }, 'Run ', h('code', null, hint), '.') : null,
     ].filter(Boolean);
   }
-  return [notice('bad', h('strong', null, what + ' unavailable: '), source.message || 'unknown error')];
+  return [notice('bad', h('strong', null, what + ' unavailable: '),
+    source.message || 'unknown error')];
 }
 
 /* ---------- Voucher states, as the roles record them ---------- */
@@ -291,7 +365,10 @@ function stateBadge(state) {
   return badge(label, kind);
 }
 
-/** What the node says about a voucher, in a line. `actions` maps transaction IDs to journal labels. */
+/**
+ * What the node says about a voucher, in a line.
+ * `actions` maps transaction IDs to journal labels.
+ */
 function chainNote(chain, actions) {
   if (!chain) return null;
   let text;
@@ -320,7 +397,8 @@ function txChainBadge(chain, nodeUp) {
 
 function voucherTable(vouchers, actions, available) {
   return h('table', null,
-    h('thead', null, h('tr', null, h('th', null, 'Voucher'), h('th', { class: 'num' }, 'Sparks'), h('th', null, 'State'))),
+    h('thead', null, h('tr', null,
+      h('th', null, 'Voucher'), h('th', { class: 'num' }, 'Sparks'), h('th', null, 'State'))),
     h('tbody', null, vouchers.map((v) => h('tr', null,
       h('td', null, mono(v.id, 10)),
       h('td', { class: 'num' }, orDash(v.qty)),
@@ -333,7 +411,8 @@ function voucherTable(vouchers, actions, available) {
 
 function drawOwner(source, actions) {
   const body = $('owner-body');
-  if (source.state !== 'ok') return body.replaceChildren(...unavailable(source, 'Owner', 'firebreak-owner init'));
+  if (source.state !== 'ok') return body.replaceChildren(
+    ...unavailable(source, 'Owner', 'firebreak-owner init'));
   const o = source.data;
   const parts = [
     h('p', { class: 'small muted' },
@@ -351,16 +430,20 @@ function ownerAllowance(a, actions) {
   const confirmed = (r) => r.state === 'confirmed' || (r.chain && r.chain.state === 'confirmed');
   const nodeSays = { mempool: 'in the mempool', unknown: 'not seen by the node yet' };
   const recoveries = a.recovery.map((r) => h('div', null,
-    confirmed(r) ? badge('revoked — recovery confirmed', 'ok') : badge('recovery pending', 'warn'),
+    confirmed(r)
+      ? badge('revoked — recovery confirmed', 'ok')
+      : badge('recovery pending', 'warn'),
     ' ', plural(r.vouchers.length, 'voucher', 'vouchers'), ' · tx ', mono(r.txid, 10),
     r.chain && r.chain.state !== 'confirmed'
-      ? h('span', { class: 'small muted' }, ' · node: ' + (nodeSays[r.chain.state] || 'unavailable'))
+      ? h('span', { class: 'small muted' },
+        ' · node: ' + (nodeSays[r.chain.state] || 'unavailable'))
       : null));
   return h('div', { class: 'allowance' },
     h('div', { class: 'head' },
       h('strong', null, 'Allowance ', mono(a.allowance, 16)),
       h('span', null, 'total ', h('strong', null, orDash(a.total)), ' sparks')),
-    h('div', { class: 'small muted' }, 'merchant ', mono(a.merchant, 14), ' · delegate ', mono(a.delegate, 10),
+    h('div', { class: 'small muted' }, 'merchant ', mono(a.merchant, 14),
+      ' · delegate ', mono(a.delegate, 10),
       ' · funded by ', mono(a.funding_txid, 10)),
     voucherTable(a.vouchers, actions, false),
     h('div', { class: 'muted small' }, 'Recovery'),
@@ -380,12 +463,14 @@ function drawApp(source, actions) {
   const vouchers = $('app-vouchers');
   if (source.state !== 'ok') {
     status.replaceChildren(...unavailable(source, 'App (payment agent)', 'firebreak-agent serve'));
-    vouchers.replaceChildren(h('p', { class: 'empty' }, 'No voucher information while the app is unavailable.'));
+    vouchers.replaceChildren(h('p', { class: 'empty' },
+      'No voucher information while the app is unavailable.'));
     drawAllowanceChoices([]);
     return;
   }
   const a = source.data;
-  status.replaceChildren(h('p', { class: 'small muted' }, 'Delegated verification key (public) ', mono(a.delegate, 16)));
+  status.replaceChildren(h('p', { class: 'small muted' },
+    'Delegated verification key (public) ', mono(a.delegate, 16)));
   drawAllowanceChoices(a.allowances);
   if (!a.allowances.length) {
     vouchers.replaceChildren(h('p', { class: 'empty' }, 'No allowance imported yet.'));
@@ -407,7 +492,8 @@ function drawAllowanceChoices(allowances) {
     allowanceKey = key;
     const chosen = select.value;
     select.replaceChildren(...(allowances.length
-      ? allowances.map((a) => h('option', { value: a.allowance }, short(a.allowance, 16) + ' — ' + orDash(a.total) + ' sparks'))
+      ? allowances.map((a) => h('option', { value: a.allowance },
+        short(a.allowance, 16) + ' — ' + orDash(a.total) + ' sparks'))
       : [h('option', { value: '' }, 'no allowance yet')]));
     select.disabled = !allowances.length;
     if (allowances.some((a) => a.allowance === chosen)) select.value = chosen;
@@ -425,12 +511,14 @@ function fillMerchant() {
 function drawPayResult() {
   const box = $('pay-result');
   if (payInFlight) {
-    return box.replaceChildren(notice('info', 'Paying… the agent waits up to 30 seconds for the node to confirm.'));
+    return box.replaceChildren(notice('info',
+      'Paying… the agent waits up to 30 seconds for the node to confirm.'));
   }
   if (!lastPay) return box.replaceChildren(h('p', { class: 'empty' }, 'No payment requested yet.'));
   const r = lastPay;
   const asked = h('div', { class: 'small' },
-    'Requested ' + r.request.amount + ' sparks to ', mono(r.request.merchant, 14), ' at ' + new Date(r.when).toLocaleTimeString());
+    'Requested ' + r.request.amount + ' sparks to ', mono(r.request.merchant, 14),
+    ' at ' + new Date(r.when).toLocaleTimeString());
   if (r.ok && r.body && r.body.txid) {
     return box.replaceChildren(notice('ok',
       h('strong', null, 'Payment ' + (r.body.state === 'redeemed' ? 'confirmed' : 'submitted')),
@@ -458,7 +546,8 @@ async function pay(event) {
   };
   if (!request.allowance || payInFlight) return;
   if (!/^[0-9]+$/.test(request.amount)) {
-    lastPay = { when: Date.now(), ok: false, http: 0, body: null, text: 'Enter the amount as a whole number of sparks.', request };
+    lastPay = { when: Date.now(), ok: false, http: 0, body: null,
+      text: 'Enter the amount as a whole number of sparks.', request };
     return drawPayResult();
   }
   payInFlight = true;
@@ -473,9 +562,11 @@ async function pay(event) {
     const text = await response.text();
     let body = null;
     try { body = JSON.parse(text); } catch (e) { /* not JSON: the text is shown instead */ }
-    lastPay = { when: Date.now(), ok: response.ok, http: response.status, body, text: text.slice(0, 600), request };
+    lastPay = { when: Date.now(), ok: response.ok, http: response.status, body,
+      text: text.slice(0, 600), request };
   } catch (e) {
-    lastPay = { when: Date.now(), ok: false, http: 0, body: null, text: 'dashboard server unreachable: ' + e.message, request };
+    lastPay = { when: Date.now(), ok: false, http: 0, body: null,
+      text: 'dashboard server unreachable: ' + e.message, request };
   }
   payInFlight = false;
   $('pay-button').disabled = $('pay-allowance').disabled;
@@ -497,7 +588,8 @@ async function revealKey() {
     try { body = JSON.parse(text); } catch (e) { /* not JSON */ }
     if (!response.ok || !body || !body.secret) {
       const why = body && body.error ? body.error : text.slice(0, 300);
-      return box.replaceChildren(notice('bad', 'The agent did not reveal its key (HTTP ' + response.status + '): ', why));
+      return box.replaceChildren(notice('bad',
+        'The agent did not reveal its key (HTTP ' + response.status + '): ', why));
     }
     const hide = h('button', { type: 'button', class: 'plain' }, 'Hide key');
     hide.addEventListener('click', () => box.replaceChildren());
@@ -515,13 +607,16 @@ async function revealKey() {
 
 function drawMerchant(source) {
   const body = $('merchant-body');
-  if (source.state !== 'ok') return body.replaceChildren(...unavailable(source, 'Merchant', 'firebreak-merchant init'));
+  if (source.state !== 'ok') return body.replaceChildren(
+    ...unavailable(source, 'Merchant', 'firebreak-merchant init'));
   const m = source.data;
   const receipts = m.receipts.map((r) => h('tr', null,
     h('td', { class: 'num' }, orDash(r.qty)),
     h('td', null, orDash(r.memo)),
-    h('td', null, mono(r.txid, 10), r.height == null ? null : h('div', { class: 'small muted' }, 'height ' + r.height)),
-    h('td', null, r.spent ? badge('spent', 'info', r.spent_txid || null) : badge('unspent', 'ok'))));
+    h('td', null, mono(r.txid, 10),
+      r.height == null ? null : h('div', { class: 'small muted' }, 'height ' + r.height)),
+    h('td', null,
+      r.spent ? badge('spent', 'info', r.spent_txid || null) : badge('unspent', 'ok'))));
   const spends = m.spends.map((s) => h('tr', null,
     h('td', { class: 'num' }, orDash(s.qty)),
     h('td', null, mono(s.to, 14)),
@@ -534,7 +629,8 @@ function drawMerchant(source) {
     h('thead', null, h('tr', null, heads.map(([text, cls]) => h('th', { class: cls }, text)))),
     h('tbody', null, rows));
   body.replaceChildren(
-    h('p', { class: 'small muted' }, 'Snapshot written ' + when(m.updated) + ' at chain height ' + orDash(m.tip_height) +
+    h('p', { class: 'small muted' },
+      'Snapshot written ' + when(m.updated) + ' at chain height ' + orDash(m.tip_height) +
       '. Address ', mono(m.address, 16)),
     h('div', { class: 'muted small' }, 'Merchant balance'),
     h('div', { class: 'big' }, orDash(m.balance), ' ', h('small', null, 'sparks')),
@@ -557,17 +653,22 @@ const OUTCOMES = { accepted: 'ok', rejected: 'bad', unknown: 'warn' };
 function drawObserver(source, nodeUp) {
   const body = $('observer-body');
   const intro = h('p', { class: 'small' },
-    'Decoded from the public bytes and re-verified here. Amounts stay hidden (', h('strong', null, 'amount: not public'),
-    '): the chain shows commitments, never quantities. Actor and action are app labels, not facts on the chain.');
-  if (source.state !== 'ok') return body.replaceChildren(intro, ...unavailable(source, 'Journal', null));
+    'Decoded from the public bytes and re-verified here. Amounts stay hidden (',
+    h('strong', null, 'amount: not public'),
+    '): the chain shows commitments, never quantities. ' +
+    'Actor and action are app labels, not facts on the chain.');
+  if (source.state !== 'ok') return body.replaceChildren(
+    intro, ...unavailable(source, 'Journal', null));
   const j = source.data;
   const parts = [intro];
   if (j.malformed.length) {
     parts.push(notice('warn',
-      plural(j.malformed.length, 'journal line is', 'journal lines are') + ' not readable and ignored (line ' +
+      plural(j.malformed.length, 'journal line is', 'journal lines are') +
+      ' not readable and ignored (line ' +
       j.malformed.map((m) => m.line).join(', ') + ').'));
   }
-  if (j.total > j.shown) parts.push(h('p', { class: 'small muted' }, 'Showing the newest ' + j.shown + ' of ' + j.total + '.'));
+  if (j.total > j.shown) parts.push(h('p', { class: 'small muted' },
+    'Showing the newest ' + j.shown + ' of ' + j.total + '.'));
   if (!j.entries.length) parts.push(h('p', { class: 'empty' }, 'Nothing has been submitted yet.'));
   for (const e of j.entries) parts.push(observerEntry(e, nodeUp));
   body.replaceChildren(...parts);
@@ -578,16 +679,20 @@ function observerEntry(e, nodeUp) {
   const outcome = OUTCOMES[e.outcome] ? e.outcome : 'unknown';
   const card = h('div', { class: 'tx ' + outcome },
     h('div', { class: 'top' },
-      h('span', { class: 'label', title: 'app label, not on chain' }, (e.actor || '?') + ' · ' + (e.action || '?')),
+      h('span', { class: 'label', title: 'app label, not on chain' },
+        (e.actor || '?') + ' · ' + (e.action || '?')),
       h('span', { class: 'small muted' }, 'app label, not on chain'),
       h('span', { class: 'small muted' }, when(e.time))),
     h('div', { class: 'top gap' },
       badge('stage: ' + (e.stage || '?'), 'grey'),
       badge(e.outcome || 'unknown', OUTCOMES[e.outcome] || 'grey'),
-      txid ? h('span', null, 'txid ', mono(txid, 16)) : h('span', { class: 'muted' }, 'no transaction ID'),
+      txid
+        ? h('span', null, 'txid ', mono(txid, 16))
+        : h('span', { class: 'muted' }, 'no transaction ID'),
       txid ? txChainBadge(e.chain, nodeUp) : null));
   if (e.txid_matches === false) {
-    card.append(notice('bad', 'The recorded transaction ID is not the one the transaction bytes yield.'));
+    card.append(notice('bad',
+      'The recorded transaction ID is not the one the transaction bytes yield.'));
   }
   if (e.error) card.append(notice('bad', h('strong', null, 'error: '), e.error));
   if (e.note) card.append(h('div', { class: 'small muted' }, 'note (app label): ' + e.note));
@@ -598,39 +703,52 @@ function observerEntry(e, nodeUp) {
 function txDetails(e) {
   const tx = e.tx;
   const recorded = e.inputs.length
-    ? [h('dt', null, 'inputs'), h('dd', null, idList(e.inputs), h('div', { class: 'small muted' }, 'as recorded by the app, not checked'))]
+    ? [h('dt', null, 'inputs'),
+      h('dd', null, idList(e.inputs),
+        h('div', { class: 'small muted' }, 'as recorded by the app, not checked'))]
     : [];
-  if (!tx) return h('dl', null, h('dt', null, 'bytes'), h('dd', { class: 'muted' }, 'no transaction bytes recorded'), recorded);
+  if (!tx) return h('dl', null, h('dt', null, 'bytes'),
+    h('dd', { class: 'muted' }, 'no transaction bytes recorded'), recorded);
   if (!tx.decoded) {
-    return h('dl', null, h('dt', null, 'decoding'), h('dd', null, badge('not a transaction', 'bad'), ' ', tx.decode_error));
+    return h('dl', null,
+      h('dt', null, 'decoding'),
+      h('dd', null, badge('not a transaction', 'bad'), ' ', tx.decode_error));
   }
-  const size = plural(tx.membership_proofs || 0, 'membership proof', 'membership proofs') + ', ' + tx.size_bytes + ' bytes';
+  const size = plural(tx.membership_proofs || 0, 'membership proof', 'membership proofs') +
+    ', ' + tx.size_bytes + ' bytes';
   if (!tx.verified) {
     return h('dl', null,
       h('dt', null, 'check'),
-      h('dd', null, badge('verification failed', 'bad'), ' ', tx.verification_error, ' ', h('span', { class: 'small muted' }, size)),
+      h('dd', null, badge('verification failed', 'bad'), ' ', tx.verification_error, ' ',
+        h('span', { class: 'small muted' }, size)),
       h('dt', null, 'claimed id'),
-      h('dd', null, mono(tx.claimed_txid, 16), ' ', h('span', { class: 'small muted' }, 'a claim the verifier did not accept')),
+      h('dd', null, mono(tx.claimed_txid, 16), ' ',
+        h('span', { class: 'small muted' }, 'a claim the verifier did not accept')),
       recorded,
       h('dt', null, 'effects'),
       h('dd', { class: 'muted' }, 'none can be shown for a transaction that does not verify'));
   }
   const rows = [
     h('dt', null, 'check'),
-    h('dd', null, badge('decoded and verified', 'ok'), ' ', h('span', { class: 'small muted' }, size)),
+    h('dd', null, badge('decoded and verified', 'ok'), ' ',
+      h('span', { class: 'small muted' }, size)),
     h('dt', null, 'inputs'),
     h('dd', null, tx.inputs.length ? idList(tx.inputs) : h('span', { class: 'muted' }, 'none')),
     h('dt', null, 'outputs'),
-    h('dd', null, tx.outputs.length ? tx.outputs.map(outputView) : h('span', { class: 'muted' }, 'none')),
+    h('dd', null,
+      tx.outputs.length ? tx.outputs.map(outputView) : h('span', { class: 'muted' }, 'none')),
   ];
   if (tx.data.length) {
     rows.push(h('dt', null, 'data'), h('dd', null, h('ul', null, tx.data.map((d) => h('li', null,
-      d.label + ': ' + d.bytes + ' bytes', d.after_output == null ? null : ' (follows output #' + (d.after_output + 1) + ')')))));
+      d.label + ': ' + d.bytes + ' bytes',
+      d.after_output == null ? null : ' (follows output #' + (d.after_output + 1) + ')')))));
   }
   if (tx.fees.length) {
-    rows.push(h('dt', null, 'fees'), h('dd', null, tx.fees.map((f) => h('div', null, f.sparks + ' sparks (fees are public)'))));
+    rows.push(h('dt', null, 'fees'),
+      h('dd', null, tx.fees.map((f) => h('div', null, f.sparks + ' sparks (fees are public)'))));
   }
-  if (tx.other_effects.length) rows.push(h('dt', null, 'other'), h('dd', null, tx.other_effects.join(', ')));
+  if (tx.other_effects.length) rows.push(h('dt', null, 'other'),
+    h('dd', null, tx.other_effects.join(', ')));
   return h('dl', null, rows);
 }
 
@@ -644,7 +762,8 @@ function outputView(o, index) {
       o.flv_commitment ? [h('span', null, 'flavor commitment'), mono(o.flv_commitment, 24)] : null,
       o.sealed_receipt_bytes == null
         ? null
-        : [h('span', null, 'sealed receipt'), h('span', null, o.sealed_receipt_bytes + ' bytes, encrypted')]),
+        : [h('span', null, 'sealed receipt'),
+          h('span', null, o.sealed_receipt_bytes + ' bytes, encrypted')]),
     h('div', null, 'amount: ', h('strong', null, o.amount)));
 }
 
@@ -676,7 +795,8 @@ function render(state) {
   const nodeUp = state.node.state === 'ok';
   const actions = journalLabels(state);
   const labels = [...actions];
-  drawIfChanged('status', [state.node, state.agent.state, state.agent.message], () => drawStatus(state));
+  drawIfChanged('status', [state.node, state.agent.state, state.agent.message],
+    () => drawStatus(state));
   drawIfChanged('owner', [state.owner, labels], () => drawOwner(state.owner, actions));
   drawIfChanged('app', [state.agent, labels], () => drawApp(state.agent, actions));
   drawIfChanged('merchant', state.merchant, () => drawMerchant(state.merchant));
@@ -687,12 +807,18 @@ function drawStatus(state) {
   const node = state.node;
   const agent = state.agent;
   $('status-line').replaceChildren(
-    h('span', null, 'Node ', node.state === 'ok' ? badge('tip height ' + node.data.height, 'ok', node.data.hash) : badge('unreachable', 'bad')),
-    h('span', null, 'Agent ', agent.state === 'ok' ? badge('online', 'ok') : badge('unavailable', 'bad')),
+    h('span', null, 'Node ',
+      node.state === 'ok'
+        ? badge('tip height ' + node.data.height, 'ok', node.data.hash)
+        : badge('unreachable', 'bad')),
+    h('span', null, 'Agent ',
+      agent.state === 'ok' ? badge('online', 'ok') : badge('unavailable', 'bad')),
     h('span', { class: 'small muted', id: 'age' }));
   const notes = [];
-  if (node.state !== 'ok') notes.push(notice('bad', h('strong', null, 'Node: '), node.message || 'unavailable'));
-  if (agent.state !== 'ok') notes.push(notice('warn', h('strong', null, 'App: '), agent.message || 'unavailable'));
+  if (node.state !== 'ok') notes.push(notice('bad', h('strong', null, 'Node: '),
+    node.message || 'unavailable'));
+  if (agent.state !== 'ok') notes.push(notice('warn', h('strong', null, 'App: '),
+    agent.message || 'unavailable'));
   $('source-notes').replaceChildren(...notes);
   showAge();
 }

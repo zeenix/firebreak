@@ -12,8 +12,9 @@ publish = false
 
 # Flame's VM needs the `dynamic-labels` feature that only the runflame fork of merlin has. Cargo
 # honours `[patch]` only in the root workspace, so this mirrors the pin in flame-lib/Cargo.toml.
-[patch.crates-io]
-merlin = { git = "https://github.com/runflame/merlin", rev = "fcc51efb4fc0b47e1a004cfe3aef65f47c5612f0" }
+[patch.crates-io.merlin]
+git = "https://github.com/runflame/merlin"
+rev = "fcc51efb4fc0b47e1a004cfe3aef65f47c5612f0"
 
 # Proving and verifying are unbearably slow unoptimized, so the two crypto crates are optimized in
 # dev builds too, as in flame-lib.
