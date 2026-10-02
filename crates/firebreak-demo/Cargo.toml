@@ -1,0 +1,26 @@
+[package]
+name = "firebreak-demo"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+axum = "0.8.9"
+clap = { version = "4.6.7", features = ["derive"] }
+firebreak-core = { version = "0.1.0", path = "../firebreak-core" }
+flamechain = { version = "0.1.0", path = "../../flame-lib/flamechain" }
+flamed-rpc = { version = "0.1.0", path = "../../flame-lib/flamed-rpc" }
+flamevm = { version = "0.1.0", path = "../../flame-lib/flamevm" }
+hex = "0.4.3"
+http-body-util = "0.1.5"
+hyper-util = { version = "0.1.21", features = ["client-legacy", "http1", "tokio"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "net", "time"] }
+
+[dev-dependencies]
+firebreak-core = { path = "../firebreak-core", features = ["devnet"] }
+flamed = { path = "../../flame-lib/flamed", features = ["devnet"] }
+flamekd = { path = "../../flame-lib/flamekd" }
+flamepayments = { path = "../../flame-lib/flamepayments" }
+tempfile = "3.27.0"
