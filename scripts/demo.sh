@@ -83,7 +83,10 @@ owner init --genesis-sparks 1000
 
 "$root/scripts/devnet.sh" "$data" > "$data/devnet.log" 2>&1 &
 wait_for "The node" "$rpc"
-agent serve --listen "$agent_api" --reveal-key > "$data/agent.log" 2>&1 &
+# Started directly, not through the `agent` function: a backgrounded function is a subshell, and
+# stopping it at the end would leave the server itself running.
+"$bin/firebreak-agent" --data-dir "$data" --rpc "$rpc" \
+    serve --listen "$agent_api" --reveal-key > "$data/agent.log" 2>&1 &
 wait_for "The app's API" "http://$agent_api/api/status"
 "$bin/firebreak-demo" --data-dir "$data" --rpc "$rpc" --agent "http://$agent_api" \
     --listen "$dashboard" > "$data/dashboard.log" 2>&1 &

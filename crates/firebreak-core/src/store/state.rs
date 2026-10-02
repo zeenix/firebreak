@@ -118,10 +118,11 @@ pub struct Observed {
 /// The node alone decides that a voucher is spent, and it reports a spend only once a block holds
 /// it, so only a confirmed spend makes a voucher `redeemed` or `recovered`. A spend the role did
 /// not make is the other branch's: the owner sees a redemption, the agent a recovery. A pending
-/// state survives only while its transaction waits in the mempool; once the node no longer knows
-/// the transaction, it was dropped and the voucher is whatever the chain says. A funding the node
-/// does not know leaves the allowance `prepared`, which its owner may submit again: rebuilt from
-/// the same inputs and outputs, it has the same transaction id and creates the same vouchers.
+/// state survives while the node knows its transaction, in the mempool or in a block that the
+/// contract's observation predates; once the node no longer knows the transaction, it was dropped
+/// and the voucher is whatever the chain says. A funding the node does not know leaves the
+/// allowance `prepared`, which its owner may submit again: rebuilt from the same inputs and
+/// outputs, it has the same transaction id and creates the same vouchers.
 pub fn reconcile(role: Role, recorded: VoucherState, observed: &Observed) -> VoucherState {
     match &observed.contract {
         ContractState::Spent { txid, .. } => {
@@ -136,8 +137,14 @@ pub fn reconcile(role: Role, recorded: VoucherState, observed: &Observed) -> Vou
                 Role::Owner => VoucherState::RecoveryPending,
                 Role::Agent => VoucherState::RedemptionPending,
             };
-            let waiting = matches!(observed.own_spend, Some((_, TxState::Mempool)));
-            if recorded == pending && waiting {
+            // A spend the node reports confirmed while the contract still reads unspent means the
+            // contract was observed before the block that holds the spend: the next observation
+            // shows it spent. Only a spend the node no longer knows at all was dropped.
+            let alive = matches!(
+                observed.own_spend,
+                Some((_, TxState::Mempool | TxState::Confirmed { .. }))
+            );
+            if recorded == pending && alive {
                 pending
             } else {
                 VoucherState::Unspent
@@ -230,6 +237,9 @@ mod tests {
         ] {
             let waiting = observed(unspent(), confirmed, Some((OURS, TxState::Mempool)));
             assert_eq!(reconcile(role, pending, &waiting), pending);
+            // A block between the two queries: the spend is in it, the contract read predates it.
+            let raced = observed(unspent(), confirmed, Some((OURS, confirmed)));
+            assert_eq!(reconcile(role, pending, &raced), pending);
             let dropped = observed(unspent(), confirmed, Some((OURS, TxState::Unknown)));
             assert_eq!(reconcile(role, pending, &dropped), VoucherState::Unspent);
             let nothing = observed(unspent(), confirmed, None);
