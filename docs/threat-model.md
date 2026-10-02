@@ -6,12 +6,13 @@ Firebreak does not claim. Each claim names the test that checks it.
 
 ## Parties and keys
 
-| Party | Holds | Trusted for |
-| --- | --- | --- |
-| Owner | Wallet seed, voucher authority key, every voucher's opening | Everything: it funds, defines and recovers allowances |
-| Delegate (the app) | Delegated key, public voucher descriptors | Nothing. Assumed hostile |
-| Merchant | Merchant wallet seed | Receiving payments; not trusted to deliver goods |
-| Public | Chain data | Nothing |
+- **Owner** holds the wallet seed, the voucher authority key and every voucher's opening. It is
+  trusted for everything: it funds, defines and recovers allowances.
+- **Delegate** (the app) holds the delegated key and the public voucher descriptors. It is trusted
+  for nothing and assumed hostile.
+- **Merchant** holds the merchant's wallet seed. It is trusted to receive payments, not to deliver
+  goods.
+- **Public**: anyone who reads chain data. Trusted for nothing.
 
 The owner's funding and recovery signer is the trusted component. It chooses the merchant, the
 delegated key, the voucher amounts, the contract programs and the encrypted receipts.
@@ -48,29 +49,41 @@ value (`mix`), single-use contract inputs and the fixed programs enforce it on c
 
 ## What the adversary cannot do
 
-Every row is run by `crates/firebreak-attack/tests/matrix.rs` (or the lifecycle test named) against
-an in-process Flame node, with the genuine delegated key. Each candidate is serialized, decoded
-and verified the way the chain does, then offered to the node's mempool. After every refused
-attempt the test mints a block and checks that the targeted voucher is still unspent, and at the
-end that it still redeems to the merchant.
+`crates/firebreak-attack/tests/matrix.rs` runs every attempt below against an in-process Flame
+node with the genuine delegated key, and `tests/cli.rs` runs them again through the runner behind
+the attack command line, over the node's JSON-RPC interface. Each candidate is serialized, decoded and verified the
+way the chain does, then offered to the node's mempool. After every refused attempt the test mints
+a block and checks that the targeted voucher is still unspent, and at the end that it still
+redeems to the merchant.
 
-| Attempt | Stopped by | Observed result |
-| --- | --- | --- |
-| Spend the voucher through `signtx` on its own predicate (key path), signed by the delegate | Verifier and node | `BatchSignatureVerificationFailed` |
-| Open the owner's recovery branch and pay the token to the attacker, signed by the delegate | Verifier and node | `BatchSignatureVerificationFailed` |
-| Open the voucher with a redemption leaf that pays the attacker | Prover | `TaprootProofMismatch` |
-| Open the voucher with a redemption leaf without the delegated authorization | Prover | `TaprootProofMismatch` |
-| Open the genuine redemption branch with an extra, payload-shaped argument | Prover | The branch cannot end with the real payload still on its stack, so it fails; `open` returns the voucher locked and the required success flag fails: `VerifyFailed` |
-| Submit a genuine redemption with its signature stripped | Verifier and node | `MissingTxBoundSignature` |
-| Pay a fee in the same transaction as a redemption | Prover | `StackNotClean`: the fee debt has nothing to balance against, because the branch paid the whole token out |
-| Redeem one voucher twice in one transaction | Node | Mempool refuses the second membership proof (`Utreexo(InvalidProof)`) |
-| Redeem a voucher after its recovery confirmed | Node | Mempool refuses the spent input |
-| Log a forged receipt after a genuine redemption | Not stopped: a valid payment | The entry after the merchant's output is still the fixed receipt; the merchant opens it |
-| Race a redemption against a recovery of the same voucher | Node | Exactly one confirms; the other is refused (`Utreexo(InvalidProof)`) |
+- **Spend the voucher through `signtx` on its own predicate (the key path), signed by the
+  delegate.** Refused by the verifier and the node: `BatchSignatureVerificationFailed`.
+- **Open the owner's recovery branch and pay the token to the attacker, signed by the
+  delegate.** Refused by the verifier and the node: `BatchSignatureVerificationFailed`.
+- **Open the voucher with a redemption leaf that pays the attacker.** Refused by the prover:
+  `TaprootProofMismatch`.
+- **Open the voucher with a redemption leaf without the delegated authorization.** Refused by the
+  prover: `TaprootProofMismatch`.
+- **Open the genuine redemption branch with an extra, payload-shaped argument.** Refused by the
+  prover: the branch cannot end with the real payload still on its stack, so it fails; `open`
+  returns the voucher locked and the required success flag fails: `VerifyFailed`.
+- **Submit a genuine redemption with its signature stripped.** Refused by the verifier and the
+  node: `MissingTxBoundSignature`.
+- **Pay a fee in the same transaction as a redemption.** Refused by the prover: `StackNotClean`.
+  The fee debt has nothing to balance against, because the branch paid the whole token out.
+- **Redeem one voucher twice in one transaction.** Refused by the node: the mempool refuses the
+  second membership proof (`Utreexo(InvalidProof)`).
+- **Redeem a voucher after its recovery confirmed.** Refused by the node: the mempool refuses the
+  spent input.
+- **Log a forged receipt after a genuine redemption.** Not stopped, because it is a valid payment.
+  The entry after the merchant's output is still the fixed receipt, and the merchant opens it.
+- **Race a redemption against a recovery of the same voucher.** Exactly one confirms; the node
+  refuses the other (`Utreexo(InvalidProof)`).
 
-"Prover" means the VM refused to prove the candidate, so no transaction bytes exist to submit.
-That is a real rejection, but a weaker form of evidence than a node refusing bytes: the tables
-above keep the two apart, and none of the prover-stage rows is presented as a node decision.
+"Refused by the prover" means the VM refused to prove the candidate, so no transaction bytes
+exist to submit. That is a real rejection, but a weaker form of evidence than a node refusing
+bytes: the list above keeps the two apart, and no prover-stage refusal is presented as a node
+decision.
 
 The honest client also refuses a payment it cannot make exactly (for example 110 from an
 allowance of 100). That is a policy check of the client and proves nothing about security; the

@@ -8,7 +8,6 @@ publish.workspace = true
 cells = { version = "0.1.0", path = "../../flame-lib/cells" }
 curve25519-dalek = { version = "4", features = ["serde", "legacy_compatibility", "rand_core"] }
 flamechain = { version = "0.1.0", path = "../../flame-lib/flamechain" }
-flamed = { version = "0.1.0", path = "../../flame-lib/flamed", features = ["devnet"], optional = true }
 flamed-rpc = { version = "0.1.0", path = "../../flame-lib/flamed-rpc" }
 flamekd = { version = "0.1.0", path = "../../flame-lib/flamekd" }
 flamepayments = { version = "0.1.0", path = "../../flame-lib/flamepayments" }
@@ -23,6 +22,12 @@ serde_json = "1.0.151"
 tempfile = { version = "3", optional = true }
 thiserror = "2"
 tokio = { version = "1.53.1", features = ["time"] }
+
+[dependencies.flamed]
+version = "0.1.0"
+path = "../../flame-lib/flamed"
+features = ["devnet"]
+optional = true
 
 [features]
 # An in-process Flame devnet, for tests and local tooling.

@@ -42,14 +42,16 @@ apps on Flame, through fixed-value, single-use vouchers.
 Done:
 
 - [x] Record the revision actually used, including local modifications (README, this file).
+- [x] Run the demo from clean application state with real validation: `scripts/demo.sh --auto`
+      against the real `flamed`, with release builds, ends with owner 940, merchant 60,
+      allowance 0.
 - [x] Confirm merchant spendability and owner-only recovery (lifecycle tests and the demo).
 - [x] Review the attack evidence and the wording of security claims (docs/threat-model.md).
 - [x] Reconcile the final balances; the devnet charges no fees (owner 940, merchant 60).
 
 Still to do by the team:
 
-- [ ] Run the demo from clean application state with real validation (`scripts/demo.sh --auto`)
-      on the presenting laptop.
+- [ ] Run `scripts/demo.sh --auto` once more on the presenting laptop.
 - [ ] Confirm the Flame bonus deadline and whether registration in the shared project system is
       required.
 - [ ] Confirm that a local devnet demonstration is accepted, and any sponsor-specific

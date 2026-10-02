@@ -44,15 +44,19 @@ denominations, not a cryptographic rejection.
 
 ## Components
 
-| Crate | Role |
-| --- | --- |
-| `firebreak-core` | Voucher programs and predicate tree, funding, redemption and recovery transactions, signing, node client, stores, journal |
-| `firebreak-owner` | Owner CLI: holds the owner's wallet and voucher openings; creates and recovers allowances |
-| `firebreak-agent` | The app: holds only the delegated key; pays from the allowance through a narrow API |
-| `firebreak-merchant` | Merchant CLI: finds payments, opens receipts, spends what it received |
-| `firebreak-attack` | Adversary: builds and submits unauthorized transactions with the delegated key |
-| `firebreak-demo` | Local dashboard: owner, app, merchant and public-observer views |
-| `firebreak-mcp` | Optional AI tool: an MCP server that offers a model only the app's `pay` (see [docs/ai-tool.md](docs/ai-tool.md)) |
+- `firebreak-core`: the voucher programs and predicate tree; the funding, redemption and recovery
+  transactions; signing; the node client, stores and journal.
+- `firebreak-owner`: the owner's command line. It holds the owner's wallet and the vouchers'
+  openings, and creates and recovers allowances.
+- `firebreak-agent`: the app. It holds only the delegated key, and pays from the allowance through
+  a narrow API.
+- `firebreak-merchant`: the merchant's command line. It finds payments, opens their receipts, and
+  spends what it received.
+- `firebreak-attack`: the adversary. It builds and submits unauthorized transactions with the
+  delegated key.
+- `firebreak-demo`: the local dashboard, with owner, app, merchant and public-observer views.
+- `firebreak-mcp`: the optional AI tool, an MCP server that offers a model only the app's `pay`
+  (see [docs/ai-tool.md](docs/ai-tool.md)).
 
 Every component that touches the chain uses Flame: `flamevm` for the contract, scripts, proofs and
 signatures, `flamepayments` for keys, notes and ordinary transfers, `flamechain` for transaction
@@ -71,10 +75,10 @@ cargo build --release --manifest-path flame-lib/Cargo.toml -p flamed --features 
 - Flame revision: `8021a125da8febe0223a0f00e407887bd60d136f` of
   [runflame/flame-lib](https://github.com/runflame/flame-lib) (the toolchain, 1.90.0, and the
   dependency versions in `Cargo.lock` are Flame's own).
-- Local patch: [`patches/flame-lib/0001-flamepayments-prepare-output.patch`](patches/flame-lib/0001-flamepayments-prepare-output.patch)
-  adds `flamepayments::prepare_output`, which seals an output's note with Flame's existing note
-  code ahead of the transaction that publishes the output. It exposes no shared secret and adds no
-  new encryption.
+- Local patch: [`0001-flamepayments-prepare-output.patch`][patch] in `patches/flame-lib/` adds
+  `flamepayments::prepare_output`, which seals an output's note with Flame's existing note code
+  ahead of the transaction that publishes the output. It exposes no shared secret and adds no new
+  encryption.
 
 ## Running the demonstration
 
@@ -98,6 +102,8 @@ the dashboard at <http://127.0.0.1:7742>, and then runs the story with the real 
 The public observer view shows what anyone watching the chain sees: transaction IDs, inputs,
 outputs, commitments and receipt lengths, with every amount marked "not public". The final
 balances are owner 940, merchant 60, allowance 0.
+
+![The dashboard at the end of the demonstration](docs/img/dashboard.png)
 
 Each role is its own program with its own key file under `.firebreak/<role>/`:
 `firebreak-owner`, `firebreak-agent`, `firebreak-merchant`, and the adversary's
@@ -140,3 +146,5 @@ confirmed in blocks.
 Flame is Apache-2.0 and is not vendored: `scripts/setup-flame.sh` fetches it, and the only change
 to it is the patch above. Everything under `crates/`, `scripts/`, `patches/` and `docs/` is original
 work for this hackathon.
+
+[patch]: patches/flame-lib/0001-flamepayments-prepare-output.patch
