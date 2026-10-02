@@ -67,6 +67,9 @@ cleanup() {
 }
 trap cleanup EXIT
 
+# Firebreak builds against a pinned Flame checkout in ./flame-lib. This fetches it on the first run
+# and only checks it afterwards.
+"$root/scripts/setup-flame.sh"
 cargo build --release --locked -q \
     -p firebreak-owner -p firebreak-agent -p firebreak-merchant -p firebreak-attack \
     -p firebreak-demo

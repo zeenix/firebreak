@@ -21,6 +21,7 @@ if [ ! -f "$dir/chainparams.toml" ]; then
     exit 1
 fi
 if [ ! -x "$flamed" ]; then
+    "$root/scripts/setup-flame.sh"
     cargo build --release --locked --manifest-path "$root/flame-lib/Cargo.toml" \
         -p flamed --features devnet
 fi

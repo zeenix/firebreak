@@ -87,9 +87,10 @@ scripts/demo.sh          # step by step, pausing before each step
 scripts/demo.sh --auto   # the same without pauses; checks the final balances
 ```
 
-The script wipes `./.firebreak`, creates fresh keys for the three parties, writes a devnet genesis
-that gives the owner 1,000 sparks, starts `flamed` (2-second blocks, zero fees), the app's API and
-the dashboard at <http://127.0.0.1:7742>, and then runs the story with the real binaries:
+The script fetches the pinned Flame checkout if it is missing, wipes `./.firebreak`, creates fresh
+keys for the three parties, writes a devnet genesis that gives the owner 1,000 sparks, starts
+`flamed` (2-second blocks, zero fees), the app's API and the dashboard at
+<http://127.0.0.1:7742>, and then runs the story with the real binaries:
 
 1. The owner funds an allowance of 100 for one merchant: vouchers of 50, 20, 20 and 10.
 2. The delegated key is revealed, and the attacker tries to redirect the money with it. Every
