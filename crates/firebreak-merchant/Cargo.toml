@@ -1,0 +1,24 @@
+[package]
+name = "firebreak-merchant"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+firebreak-core = { version = "0.1.0", path = "../firebreak-core" }
+flamekd = { version = "0.1.0", path = "../../flame-lib/flamekd" }
+flamepayments = { version = "0.1.0", path = "../../flame-lib/flamepayments" }
+flamevm = { version = "0.1.0", path = "../../flame-lib/flamevm" }
+hex = "0.4.3"
+rand = "0.8"
+serde_json = "1.0.151"
+thiserror = "2"
+tokio = { version = "1.53.1", features = ["rt", "macros", "time", "net"] }
+
+[dev-dependencies]
+curve25519-dalek = { version = "4", features = ["serde", "legacy_compatibility", "rand_core"] }
+firebreak-core = { path = "../firebreak-core", features = ["devnet"] }
+firebreak-owner = { path = "../firebreak-owner" }
+tempfile = "3.27.0"
+tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros", "time", "net"] }
