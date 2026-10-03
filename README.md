@@ -3,6 +3,8 @@
 **Chain-enforced spending allowances for apps and AI agents, on
 [Flame](https://github.com/runflame/flame-lib).**
 
+*Second prize, Build on Flame challenge, btc++ Berlin 2026.*
+
 Apps and AI agents increasingly need to pay for things, and today that means handing them a wallet
 key: everything, spendable anywhere. Firebreak gives them a limited key instead. The owner sets
 aside an allowance for one merchant. The app can pay that merchant, up to the allowance, and
